@@ -32,8 +32,8 @@ func (c *Conn) Context() appengine.Context {
 
 func (c *Conn) Storage(name string) model.Storer {
 	s := &Storage{}
-	s.SetName(name)
-	s.SetConn(c)
+	s.name = name
+	s.conn = c
 	return s
 }
 
@@ -43,16 +43,8 @@ type Storage struct {
 	conn *Conn
 }
 
-func (s *Storage) SetConn(conn model.Connecter) {
-	s.conn = conn.(*Conn)
-}
-
 func (s *Storage) Conn() model.Connecter {
 	return s.conn
-}
-
-func (s *Storage) SetName(n string) {
-	s.name = n
 }
 
 func (s *Storage) NewKey() (model.Identifier, error) {
@@ -65,8 +57,8 @@ func (s *Storage) DecodeKey(key string) (model.Identifier, error) {
 
 func (s *Storage) NewQuery() model.Querier {
 	q := &Query{}
-	q.SetName(s.name)
-	q.SetStorage(s)
+	q.name = s.name
+	q.storage = s
 	return q
 }
 
@@ -99,15 +91,6 @@ type Query struct {
 	name    string
 	query   *datastore.Query
 	storage *Storage
-}
-
-func (q *Query) SetName(name string) {
-	q.name = name
-	q.query = datastore.NewQuery(q.name)
-}
-
-func (q *Query) SetStorage(storage model.Storer) {
-	q.storage = storage.(*Storage)
 }
 
 func (q *Query) Storage() model.Storer {
