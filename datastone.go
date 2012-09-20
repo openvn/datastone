@@ -57,7 +57,7 @@ func (s *Storage) DecodeKey(key string) (model.Identifier, error) {
 
 func (s *Storage) NewQuery() model.Querier {
 	q := &Query{}
-	q.name = s.name
+	q.query = datastore.NewQuery(s.name)
 	q.storage = s
 	return q
 }
@@ -88,7 +88,6 @@ func (s *Storage) Delete(key model.Identifier) error {
 
 // Query implement nstuff/model.Querier
 type Query struct {
-	name    string
 	query   *datastore.Query
 	storage *Storage
 }
