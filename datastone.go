@@ -197,3 +197,7 @@ func (q *Query) DeleteAll() ([]model.Identifier, error) {
 func (q *Query) Count() (int, error) {
 	return q.query.Count(q.storage.conn.context)
 }
+
+func (q *Query) Iter() model.Iter {
+	return q.query.Run(q.storage.conn.context)
+}
