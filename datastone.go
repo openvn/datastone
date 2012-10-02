@@ -199,5 +199,13 @@ func (q *Query) Count() (int, error) {
 }
 
 func (q *Query) Iter() model.Iter {
-	return q.query.Run(q.storage.conn.context)
+	return &Iter{q.query.Run(q.storage.conn.context)}
+}
+
+type Iter struct {
+	iter *datastore.Iterator
+}
+
+func (i *Iter) Next(dst interface{}) (model.Identifier, error) {
+	return i.iter.Next(dst)
 }
